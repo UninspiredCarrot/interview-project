@@ -1,12 +1,20 @@
 import { Request, Response } from 'express';
-import { getPercentageData } from './issue';
+import { fetchData,
+    calculateCounts,
+    calculatePercentages
+} from './utils';
 
 export const GET = async (_req: Request, res: Response) => {
   try {
-    const percentages = await getPercentageData('priority');
-    res.status(200).json(percentages);
+    const data = await fetchData();
+
+    const typeCounts = calculateCounts(data, 'priority');
+    const typePercentages = calculatePercentages(typeCounts, data.length);
+
+    res.json(typePercentages);
+
   } catch (error) {
-    console.error('Error fetching or processing priority data:', error);
-    res.status(500).json({ error: 'Failed to process priority data' });
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
