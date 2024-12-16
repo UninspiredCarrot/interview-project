@@ -24,3 +24,19 @@ export const getPercentageData = async (field: string) => {
     const total = data.results.length;
     return calculatePercentages(counts, total);
 };
+
+export const calculateAverageCloseTime = async () => {
+    const { data } = await axios.get<SampleData>(DATA_URL);
+    const highPriorityIssues = data.results.filter(item => item.priority.toLowerCase() === 'high' && item.status.toLowerCase() === 'solved');
+
+    const totalTime = highPriorityIssues.reduce((total, item) => {
+        const createdTime = new Date(item.created).getTime();
+        const updatedTime = new Date(item.updated).getTime();
+        const timeDifference = updatedTime - createdTime;
+        return total + timeDifference;
+    }, 0);
+
+    const averageTime = totalTime / highPriorityIssues.length;
+
+    return averageTime;
+}
