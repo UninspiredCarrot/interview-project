@@ -1,10 +1,22 @@
 import axios from 'axios';
 import { SampleData } from './types';
 
-const DATA_URL = 'https://sampleapi.squaredup.com/integrations/v1/service-desk?datapoints=500';
+const DATA_URL = 'https://sampleapi.squaredup.com/integrations/v1/service-desk';
 
-export const fetchData = async (): Promise<SampleData['results']> => {
-    const { data } = await axios.get<SampleData>(DATA_URL);
+export const fetchData = async (
+    datapoints?: number,
+    priority?: string,
+    type?: "problem" | "task" | "incident" | "question",
+    status?: "new" | "open" | "pending" | "solved" | "hold",
+): Promise<SampleData['results']> => {
+    const params: Record<string, string | number> = {};
+
+    if (priority) params.priority = priority;
+    if (datapoints) params.datapoints = datapoints;
+    if (type) params.type = type;
+    if (status) params.status = status;
+
+    const { data } = await axios.get<SampleData>(DATA_URL, { params });
     return data.results;
 };
 
