@@ -4,14 +4,12 @@ import axios from 'axios';
 
 type priorityType = 'high' | 'normal' | 'low';
 type priorityDirectionType = 'asc' | 'desc';
-type idDirectionType = 'asc' | 'desc';
 type statusType = 'new' | 'open' | 'pending' | 'solved' | 'hold';
 type typeType = 'problem' | 'task' | 'incident' | 'question';
 
 const Table = () => {
   const [data, setData] = useState<SampleData['results'] | []>([]);
   const [loading, setLoading] = useState(true);
-  const [filterValue, setFilterValue] = useState('');
   const [config, setConfig] = useState<{
     priority?: priorityType;
     priorityDirection?: priorityDirectionType;
@@ -72,11 +70,6 @@ const Table = () => {
         : priorityOrder[b.priority.toLowerCase() as priorityType] - priorityOrder[a.priority.toLowerCase() as priorityType];
     });
 
-    // if (config.idDirection) {
-    //   sortableData.sort((a, b) => {
-    //     return config.idDirection === 'asc' ? a.id - b.id : b.id - a.id;
-    //   });
-    // }
     return sortableData;
   }, [data, config]);
 
@@ -121,12 +114,6 @@ const Table = () => {
     });
   };
 
-//   const handleIdSort = () => {
-//     setConfig((prev) => ({
-//       ...prev,
-//       idDirection: prev.idDirection === 'asc' ? 'desc' : 'asc',
-//     }));
-//   };
   const handlePrioritySort = () => {
     setConfig((prev) => ({
       ...prev,
@@ -148,15 +135,12 @@ const Table = () => {
     };
 
     filteredData.forEach(item => {
-      // Tickets by Priority
       stats.ticketsByPriority[item.priority as priorityType] =
         (stats.ticketsByPriority[item.priority as priorityType] || 0) + 1;
 
-      // Tickets by Type
       stats.ticketsByType[item.type as typeType] =
         (stats.ticketsByType[item.type as typeType] || 0) + 1;
 
-      // Tickets by Status
       stats.ticketsByStatus[item.status as statusType] =
         (stats.ticketsByStatus[item.status as statusType] || 0) + 1;
 

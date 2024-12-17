@@ -6,9 +6,9 @@ export const GET = async (req: Request, res: Response): Promise<void> => {
 
         const { datapoints, priority, type, status } = req.query as {
             datapoints?: number;
-            priority?: "high" | "normal" | "low";
-            type?: "problem" | "task" | "incident" | "question";
-            status?: "new" | "open" | "pending" | "solved" | "hold";
+            priority?: "low" | "medium" | "high",
+            type?: "problem" | "task" | "question",
+            status?: "open" | "pending" | "closed",
         };
 
         const results = await fetchData(
