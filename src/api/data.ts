@@ -1,10 +1,26 @@
-import axios from 'axios';
 import { Request, Response } from 'express';
-import { SampleData } from './types';
+import { fetchData } from './utils';
 
-const DATA_URL = 'https://sampleapi.squaredup.com/integrations/v1/service-desk?datapoints=30';
+export const GET = async (req: Request, res: Response): Promise<void> => {
+    try {
 
-export const GET = async (req: Request, res: Response) => {
-    const { data } = await axios.get<SampleData>(DATA_URL)
-    res.send(data);
+        const { datapoints, priority, type, status } = req.query as {
+            datapoints?: number;
+            priority?: "low" | "medium" | "high",
+            type?: "problem" | "task" | "question",
+            status?: "open" | "pending" | "closed",
+        };
+
+        const results = await fetchData(
+            datapoints,
+            priority,
+            type,
+            status
+        );
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ error: "Failed to fetch data" });
+    }
 };

@@ -5,7 +5,7 @@ import { fetchData,
 
 export const GET = async (_req: Request, res: Response) => {
     try {
-        const data = await fetchData();
+        const data = await fetchData(500);
         const highPriorityIssues = filterData(data, { priority: 'high', status: 'solved' });
 
         if (highPriorityIssues.length === 0) {

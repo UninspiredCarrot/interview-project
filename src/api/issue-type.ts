@@ -6,7 +6,7 @@ import { fetchData,
 
 export const GET = async (_req: Request, res: Response) => {
   try {
-    const data = await fetchData();
+    const data = await fetchData(500);
 
     const typeCounts = calculateCounts(data, 'type');
     const typePercentages = calculatePercentages(typeCounts, data.length);
